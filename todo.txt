@@ -1,0 +1,9 @@
+filter out countries
+get net emissions
+get target goals
+get reduction per year needed
+get it in percent
+get it per capita
+get it per GDP
+
+Change github license
