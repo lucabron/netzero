@@ -1,4 +1,4 @@
-Get the right map and understand the country format
+Get the right map and understand the country format [done]
 
 filter out countries
 get net emissions
@@ -10,6 +10,7 @@ get it per GDP
 
 Change github license
 
-Create pledge map
+Create pledge map (what countries pledged to achieve)
 
 Create other vizualisations than map
+- clickable countries for detail

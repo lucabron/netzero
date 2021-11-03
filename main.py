@@ -32,5 +32,9 @@ df = df[['iso_code',
  'population',
  'gdp']]
 
-#%%
 print(df)
+
+#%%
+df2019 = df[df['year']==2019]
+
+print(df2019)
