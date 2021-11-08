@@ -1,4 +1,6 @@
 .leaflet-container{background-color:#c5e8ff;}
 html,body{height:100%;}
-#map{height: 100%}
+#map{height: 100%;
+	width: 100%;
+}
 

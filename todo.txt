@@ -14,3 +14,13 @@ Create pledge map (what countries pledged to achieve)
 
 Create other vizualisations than map
 - clickable countries for detail
+
+Hoste on github (at least initially)
+
+Explain methodology on about page
+
+Find sponsor and create sponsor space on about page.
+
+Domain name.
+
+Create Twitter and Linkedin account.

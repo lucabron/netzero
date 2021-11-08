@@ -1,9 +1,7 @@
 import numpy as np
 import pandas as pd
-# import matplotlib.pyplot as plt
-# import plotly.express as px
-# import seaborn as sns
-# import plotnine
+from bokeh.io import show
+from bokeh.plotting import figure
 
 #%%
 df = pd.read_csv('data/owid-co2-data.csv')
@@ -33,8 +31,27 @@ df = df[['iso_code',
  'gdp']]
 
 print(df)
+#%%
+df1990 = df[df['year']>=1990]
+
+print(df1990)
 
 #%%
 df2019 = df[df['year']==2019]
 
 print(df2019)
+print(df2019[['country','co2_growth_prct']])
+
+#%%
+# create a new plot (with a title) using figure
+p = figure(plot_width=1200, plot_height=550, title="My Line Plot")
+
+# add a line renderer
+p.line(df1990["year"], df1990["co2"] , line_width=2)
+p.xaxis.axis_label = 'Year'
+p.yaxis.axis_label = 'Co2'
+
+show(p) # show the results
+
+#%%
+print(df1990["year"])
