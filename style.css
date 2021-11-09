@@ -1,6 +1,16 @@
 .leaflet-container{background-color:#c5e8ff;}
-html,body{height:100%;}
-#map{height: 100%;
+html,body{
+	height:100%;
+	background-color: #FBFBE3;
+}
+h1, h2, p{
+	color: #13182C;
+}
+a:visited, a:active, a:link{
+  text-decoration: none;
+}
+#map{
+	height: 100%;
 	width: 100%;
 }
 
