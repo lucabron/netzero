@@ -1,12 +1,14 @@
 Get the right map and understand the country format [done]
 
 filter out countries. There is three sources for country: co2 data, pledge and geojson map.
-get net emissions
-get target goals
+get net emissions 
+get target goals (optional)
 get reduction per year needed
-get it in percent
-get it per capita
-get it per GDP
+get it in percent (optional)
+get it per capita (optional)
+get it per GDP (optional)
+find difference between straigt line and observed
+map how far the country is to the objective (need to think about methodology)
 
 Change github license
 
@@ -15,9 +17,9 @@ Create pledge map (what countries pledged to achieve)
 Create other vizualisations than map
 - clickable countries for detail
 
-Hoste on github (at least initially)
+Host on github (at least initially)
 
-Explain methodology on about page
+Explain methodology on about page [done]
 
 Find sponsor and create sponsor space on about page.
 
