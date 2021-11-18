@@ -1,8 +1,13 @@
+# Packages used are numpy, pandas and bokeh. They can be found on pip and conda.
 import numpy as np
 import pandas as pd
 from bokeh.io import show
 from bokeh.plotting import figure
-from bokeh.models import TapTool, CustomJS, ColumnDataSource, HoverTool, BasicTicker, Label
+from bokeh.models import TapTool, CustomJS, ColumnDataSource, HoverTool
+from bokeh.models import BasicTicker, Label, Span, Range, Range1d, CustomJS
+from bokeh.models import Select
+from bokeh.models.tools import PanTool, SaveTool, WheelZoomTool, ResetTool, HoverTool
+from bokeh.layouts import column
 
 pd.set_option('max_columns', None)
 
@@ -58,16 +63,15 @@ print(df.isnull().sum()) #There is missing data for CO2
 df['value_type'] = 'observed' #as opposed to the forecast one's
 
 #%%
-df80 = df[df['year']>=1980]
 # select important columns
-df80 = df80[['country', 'year', 'co2']]
+dfgraph = df[['country', 'year', 'co2']]
 
-print(df80.head())
+print(dfgraph.head())
 
 #%%
-print(df80[pd.isnull(df80['co2'])==True]) 
-df80temp = df80[pd.isnull(df80['co2'])==True]
-print(df80temp['country'].unique())
+print(dfgraph[pd.isnull(dfgraph['co2'])==True]) 
+dfgraphtemp = dfgraph[pd.isnull(dfgraph['co2'])==True]
+print(dfgraphtemp['country'].unique())
 
 # =============================================================================
 # # Countries with missing values
@@ -79,28 +83,27 @@ print(df80temp['country'].unique())
 # Namibia #no data
 # =============================================================================
 
-df80temp = df80[df80['year'].isin([2015,2019])]
-print(df80temp[df80temp['co2'].isna()])
+dfgraphtemp = dfgraph[dfgraph['year'].isin([2015,2019])]
+print(dfgraphtemp[dfgraphtemp['co2'].isna()])
 
 #%%
 #Ivory Coast and Palau have missing data for 2015.
 #They have for 2017, so I might add them back later.
-df80 = df80[-df80['country'].isin(["Cote d'Ivoire","Palau"])]
-# df80 = df80.groupby('country')
+dfgraph = dfgraph[-dfgraph['country'].isin(["Cote d'Ivoire","Palau"])]
+# dfgraph = dfgraph.groupby('country')
 
 #%%
 #create the new rows for the forecast
-df80columns_list = list(df80)
-list_countries = df80temp['country'].unique()
-current_year = df80['year'].max()
+dfgraphcolumns_list = list(dfgraph)
+list_countries = dfgraphtemp['country'].unique()
+current_year = dfgraph['year'].max()
 nb_years = 2050-current_year+1 #number of years to forecast
-new_df = df80.copy()
+dfgraphfc = dfgraph.copy()
 data = []
 
-for country in ['South Korea']: #list_countries:
+for country in list_countries: #list_countries:
     print(country)
     for i in range(nb_years):
-        print(i)
         values = [ #'iso_code',
             country, #'country',
             current_year+i,#'year',
@@ -121,38 +124,43 @@ for country in ['South Korea']: #list_countries:
             #'gdp',
             #'value_type'
             ]
-        zipped = zip(df80columns_list, values)
+        zipped = zip(dfgraphcolumns_list, values)
         row_dict = dict(zipped)
         data.append(row_dict)
-df80fc = new_df.append(data, True)
-print(df80fc)
+dfgraphfc = dfgraphfc.append(data, True)
+print(dfgraphfc)
 
 #%%
-df80fc = df80fc[df80fc['country']=='Switzerland']
+#dfgraphfc = dfgraphfc[dfgraphfc['country']=='Switzerland']
 
 #%%
 #transform pandas df into ColumnDataSource 
-source = ColumnDataSource(df80fc)
-hover = HoverTool(tooltips=[("Country", "@country"),])
-callback = CustomJS(code="alert('you tapped a circle!')")
-tap = TapTool(callback=callback)
+source = ColumnDataSource(dfgraphfc)
 
 # create a new plot (with a title) using figure
-p = figure(plot_width=1200, plot_height=550, title="Switzerland CO2 emissions")
+p = figure(plot_width=1200, plot_height=550, title="Switzerland CO2 emissions",
+           x_range=Range1d(1980, 2050, bounds=(None,2050)),
+           tools=[PanTool(dimensions='width'), SaveTool(), WheelZoomTool(), ResetTool()])
 
 # add a line renderer
 p.line("year", "co2" , line_width=2, source=source, legend_label='CO2 emissions')
-p.line([2015, 2050], [df80fc.loc[df80fc['year'] == 2015]['co2'],0],
+p.line([2015, 2050], [dfgraphfc.loc[dfgraphfc['year'] == 2015]['co2'],0],
        line_width=2, color = 'red', legend_label='Path to netzero in 2050')
 COP21 = Span(location=2015, dimension='height', line_color='green',
              line_dash='dotted', line_width=2)
 p.add_layout(COP21)
+
 p.xaxis.ticker = BasicTicker(base=5)
 p.xaxis.axis_label = 'Year'
 p.yaxis.axis_label = 'CO2 emissions [mio of tons]'
 p.add_layout(Label(x=2016, text='COP21', text_color='green'))
+    
+#dropdown menu
+select = Select(title="Country:", value="World", options=list(df['country'].unique()))
+select.js_on_change("value", CustomJS(code="""
+    console.log('select: value=' + this.value, this.toString())
+"""))
 
-show(p) # show the results
+layout = column(select, p)
 
-#%%
-print(df80)
+show(layout) # show the results
