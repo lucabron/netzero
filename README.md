@@ -13,7 +13,6 @@
 	<p>Some countries signed the agreement, but didn't pledge for net-zero at 2050, for example China (2060) and India (2070).
 	But to for the goal of 1.5 degree celsius to be reached, global net-zero needs to be reached in 2050 <a href="https://www.ipcc.ch/sr15/chapter/spm/">according to the ICPP.</a>
 	Therefore, to facilitate the comprehension and the comparison of the data vizualisation, the carbon neutral target is 2050 for all countries.</p>
-	
 	<h2>Why linear extrapolation and not another curve?</h2>
 	<p><b>Argument:</b> The curve should decrease faster and faster since the countries will need time to put their programmes into practice and have them deliver effects.</p>
 	<p><b>Counter-argument:</b> 2015 is not the starting point of environmental awareness.
@@ -21,20 +20,15 @@
 	States were aware of the problem long before. There is no excuse for not implementing their program earlier.<br>
 	Also, you may argue that the first gains will be easier to realise because there is a lot of <i>low hanging fruits to catch</i> and reducing the last bit of emissions will be harder.</p>
 	<p>I am willing to add more complexe models in the future (I am aware that there is some awesome predictive models out there), but I am worried that the complexity will decrease the user-experience.</p>
-	
 	<h2>Carbon neutrality or Net zero?</h2>
 	<p>The two concepts are similar but carbon neutrality refers only to CO2 emissions while net zero includes all the greenhouse gases.</br>
 	I would rather provide net zero emissions since it makes for a more complete picture, but unfortunatly I haven't found country data for the period after 2016.</p>
-
 	<h2>What about carbon sinks?</h2>
 	<p>Carbon can be emitted, but also absorbed. Some countries like Bhutan and Suriname do it well and already reached the net zero goal.</br>
 	However, because of a lack of data, only the carbon emissions are displayed.
 	Though, it is still important to track them as the net zero target is a global one.</p>
-	
 	<hr>
 	<p><i><a href="https://en.wikipedia.org/wiki/List_of_parties_to_the_Paris_Agreement">*Eritrea, Iran, Lybia and Yemen have signed but did not ratify it.</a></i></p>
-	
 	<p>Data Source: <a href='https://github.com/owid/co2-data'>Our World In Data</a></p>
-
 <!-- Interactive world map data visualization of each country effort toward net-zero emission.
 Using Mapbox and GeoJson. Interactive graphs made using bokeh.--
