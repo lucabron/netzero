@@ -3,12 +3,11 @@ from os.path import dirname, join
 
 import numpy as np
 import pandas as pd
-from bokeh.io import show
-from bokeh.plotting import figure
-from bokeh.models import TapTool, CustomJS, ColumnDataSource, HoverTool
-from bokeh.models import BasicTicker, Label, Span, Range, Range1d, CustomJS
+from bokeh.plotting import show, figure, output_file, save
+from bokeh.models import CustomJS, ColumnDataSource
+from bokeh.models import BasicTicker, Label, Span, Range1d
 from bokeh.models import Select
-from bokeh.models.tools import PanTool, SaveTool, WheelZoomTool, ResetTool, HoverTool
+from bokeh.models.tools import PanTool, SaveTool, WheelZoomTool, ResetTool
 from bokeh.layouts import column
 
 pd.set_option('max_columns', None)
@@ -62,8 +61,6 @@ df.drop(excluded, inplace=True)
 
 print(df.head())
 print(df.isnull().sum()) #There is missing data for CO2
-
-df['value_type'] = 'observed' #as opposed to the forecast one's
 
 #%%
 # select most important columns
@@ -148,12 +145,11 @@ dfgraphfc['co2_path'] = dfgraphfc[dfgraphfc['year']==2015]['co2']
 # Creating a temporary dataframe to only get the value for forecast and loop easier.
 dfgraphfctemp = dfgraphfc[dfgraphfc['year']>=2015]
 
-# aim_reduction_abs = 0
+aim_reduction_abs = 0
 
 # Calculating the 2016 to 2050 values based on the aim reduction.
 for i in range(1,dfgraphfctemp.index.size):
     if pd.notnull(dfgraphfctemp.iat[i,3]):
-        global aim_reduction_abs
         aim_reduction_abs = dfgraphfctemp.iat[i,3]*aim_reduction
     else:
         dfgraphfctemp.iat[i,3] = dfgraphfctemp.iat[i-1,3]-aim_reduction_abs
@@ -197,7 +193,7 @@ COP21 = Span(location=2015, dimension='height', line_color='green',
 p.add_layout(COP21)
 
 # Appearance
-p.xaxis.ticker = BasicTicker(base=5)
+p.xaxis.ticker = BasicTicker(base=5, max_interval = 5)
 p.xaxis.axis_label = 'Year'
 p.yaxis.axis_label = 'CO2 emissions [mio of tons]'
 p.add_layout(Label(x=2016, text='COP21', text_color='green'))
@@ -248,6 +244,8 @@ select.js_link('value', p.title, 'text')
 #    select.options = list(df[country_selected].values)
 
 layout = column(select, p)
+
+output_file(join(dirname(__file__),'graph.html'))
 
 show(layout)
 #curdoc().add_root(layout) # show the results if using a bokeh server
