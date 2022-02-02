@@ -1,14 +1,14 @@
 Get the right map and understand the country format [done]
 
 filter out countries. There is three sources for country: co2 data, pledge and geojson map.
-get net emissions. Should I find a new dataset? 
+get net emissions. Should I find a new dataset? [done (emissions were already net)]
 get target goals (optional)
 get reduction per year needed (optional)
-get it in percent (optional)
+get it in percent (optional) [done]
 get it per capita (optional)
 get it per GDP (optional)
 Create a new column that starts in 2015 and ends in 2050 to show the path. [done]
-find difference between straight line and observed
+find difference between straight line and observed. 
 map how far the country is to the objective. use a regression.
 Create regression from already existing empty cells from 2020 to 2050.
 Use bokeh view on the full dataset to show the different views. (not sure if needed in the end)
@@ -20,10 +20,10 @@ Learn about what license to use and how they protect me. Ask for help.
 
 Create pledge map (what countries pledged to achieve). Already done by https://zerotracker.net/
 
-Create other vizualisations than graph
+Create other vizualisations than graph 
 - Hover over countries for details
 
-Host on github (at least initially)
+Host on github (at least initially) [done]
 
 Explain methodology on about page [done]
 

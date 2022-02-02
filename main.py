@@ -7,7 +7,7 @@ from bokeh.plotting import show, figure, output_file
 from bokeh.models import CustomJS, ColumnDataSource
 from bokeh.models import BasicTicker, Label, Span, Range1d
 from bokeh.models import Select
-from bokeh.models.tools import PanTool, SaveTool, WheelZoomTool, ResetTool
+from bokeh.models.tools import PanTool, SaveTool, ResetTool
 from bokeh.layouts import column
 
 pd.set_option('max_columns', None)
@@ -100,7 +100,7 @@ dfgraphfc = dfgraph.copy()
 
 data = []
 
-for country in list_countries: #list_countries:
+for country in list_countries: 
     for i in range(1,nb_years):
         values = [ #'iso_code',
             country, #'country',
@@ -139,13 +139,14 @@ dfgraphfc = dfgraphfc.reset_index(drop=True)
 
 # Getting the 2015 value
 dfgraphfc['co2_path'] = dfgraphfc[dfgraphfc['year']==2015]['co2']
-# Creating a temporary dataframe to only get the value for forecast and loop easier.
+# Creating a temporary dataframe to only get the value for forecast and
+# loop more easily.
 dfgraphfctemp = dfgraphfc[dfgraphfc['year']>=2015]
 
 aim_reduction_abs = 0
 
 # Calculating the 2016 to 2050 values based on the aim reduction.
-for i in range(1,dfgraphfctemp.index.size):
+for i in range(0,dfgraphfctemp.index.size):
     if pd.notnull(dfgraphfctemp.iat[i,3]):
         aim_reduction_abs = dfgraphfctemp.iat[i,3]*aim_reduction
     else:
@@ -161,6 +162,13 @@ dfgraphfc['co2_path'] = dfgraphfctemp['co2_path']
 #%%
 #Create Index (Maybe I should have created before. Lazy to refactor now.)
 dfgraphfc = dfgraphfc.set_index('country')
+
+#%%
+# reduce ammount of country to be seleceted in the graph for UX purpose
+selected_countries = ['World','Australia','Brazil','Canada','China','EU-27',
+                      'India','Indonesia','Japan','Mexico','Nigeria','Russia',
+                      'Saudi Arabia','South Africa','South Korea',
+                      'Switzerland','Turkey','United States',]
 
 #%%
 #Bokeh
@@ -194,7 +202,8 @@ p.yaxis.axis_label = 'CO2 emissions [mio of tons]'
 p.add_layout(Label(x=2016, text='COP21', text_color='green'))
     
 # Dropdown     
-select = Select(title="Country:", value="World", options=list_countries, width = 300)
+select = Select(title="Country:", value="World", options=selected_countries,
+                width = 300)
 
 # Interactively change the lines. It uses javascript callbacks
 callback_df = CustomJS(args = dict(render=render, source=source, select=select),
