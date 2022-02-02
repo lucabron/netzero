@@ -3,7 +3,7 @@ from os.path import dirname, join
 
 import numpy as np
 import pandas as pd
-from bokeh.plotting import show, figure, output_file, save
+from bokeh.plotting import show, figure, output_file
 from bokeh.models import CustomJS, ColumnDataSource
 from bokeh.models import BasicTicker, Label, Span, Range1d
 from bokeh.models import Select
@@ -30,6 +30,7 @@ df = df[['iso_code',
  'co2',
  'co2_growth_prct',
  'co2_growth_abs',
+ 'trade_co2',
  'co2_per_capita',
  'co2_per_gdp',
  'share_global_co2',
@@ -41,10 +42,6 @@ df = df[['iso_code',
  'methane_per_capita',
  'nitrous_oxide',
  'nitrous_oxide_per_capita',
-# I don't know what theses labels means so I comment them out for now.
-#  'primary_energy_consumption',
-#  'energy_per_capita',
-#  'energy_per_gdp',
  'population',
  'gdp']]
 
@@ -174,15 +171,13 @@ render = ColumnDataSource({
         "co2": dfgraphfc.loc['World']["co2"],
         "co2_path": dfgraphfc.loc['World']["co2_path"],}
 )
-co22015 = ColumnDataSource(dfgraphfc.loc['World'][dfgraphfc.loc['World']
-                                                  ['year']==2015])
 
 title = 'World'
 
 # create a new plot (with a title) using figure
-p = figure(plot_width=1200, plot_height=550, title=title,
+p = figure(aspect_ratio=2, sizing_mode='scale_height', title=title,
            x_range=Range1d(1980, 2050, bounds=(None,2050)),
-           tools=[PanTool(dimensions='width'), SaveTool(), WheelZoomTool(), ResetTool()])
+           tools=[PanTool(dimensions='width'), SaveTool(), ResetTool()])
 
 # add three lines renderer
 p.line("year", "co2", source=render, line_width=2, legend_label='CO2 emissions', line_alpha=0.9)
@@ -201,7 +196,7 @@ p.add_layout(Label(x=2016, text='COP21', text_color='green'))
 # Dropdown     
 select = Select(title="Country:", value="World", options=list_countries, width = 300)
 
-# Interactively change the lines
+# Interactively change the lines. It uses javascript callbacks
 callback_df = CustomJS(args = dict(render=render, source=source, select=select),
 code="""
 //Filter the countries
@@ -242,10 +237,10 @@ select.js_link('value', p.title, 'text')
 #    p.title.text = dfgraphfc[dfgraphfc['country']==select.value]
 #    country_selected = select.value
 #    select.options = list(df[country_selected].values)
-
+    
 layout = column(select, p)
 
-output_file(join(dirname(__file__),'graph.html'))
+output_file(join(dirname(__file__),'graph.html'), title='Bokeh plot: Objective net zero carbon emissions 2050')
 
 show(layout)
 #curdoc().add_root(layout) # show the results if using a bokeh server

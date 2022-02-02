@@ -1,16 +1,26 @@
-.leaflet-container{background-color:#c5e8ff;}
+/*.leaflet-container{background-color:#c5e8ff;}*/
 html,body{
-	height:100%;
-	background-color: #FBFBE3;
+	height: 100%;
+	background-color: #FBFBEE;
+}
+h1{
+	margin-bottom: 0px;
 }
 h1, h2, p{
 	color: #13182C;
 }
+p
+{
+	text-align: justify;
+}
 a:visited, a:active, a:link{
   text-decoration: none;
 }
-#map{
-	height: 100%;
-	width: 100%;
+#graph{
+	height: 75%;
 }
 
+/*#map{
+	height: 100%;
+	width: 100%;
+}*/

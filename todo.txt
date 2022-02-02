@@ -12,13 +12,15 @@ find difference between straight line and observed
 map how far the country is to the objective. use a regression.
 Create regression from already existing empty cells from 2020 to 2050.
 Use bokeh view on the full dataset to show the different views. (not sure if needed in the end)
+Add dropdown menu for ghg. data up to 2016 are in the owid dataset. For more recent (up to 2018), search CAIT, PIK and maybe UNFCCC datasets
+Add dropdown menu for trade data. 
 
 Change github license.
 Learn about what license to use and how they protect me. Ask for help.
 
 Create pledge map (what countries pledged to achieve). Already done by https://zerotracker.net/
 
-Create other vizualisations than map
+Create other vizualisations than graph
 - Hover over countries for details
 
 Host on github (at least initially)
