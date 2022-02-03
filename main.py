@@ -7,7 +7,7 @@ from bokeh.plotting import show, figure, output_file
 from bokeh.models import CustomJS, ColumnDataSource
 from bokeh.models import BasicTicker, Label, Span, Range1d
 from bokeh.models import Select
-from bokeh.models.tools import PanTool, SaveTool, ResetTool
+from bokeh.models.tools import SaveTool, ResetTool
 from bokeh.layouts import column
 
 pd.set_option('max_columns', None)
@@ -62,6 +62,9 @@ print(df.isnull().sum()) #There is missing data for CO2
 #%%
 # select most important columns
 dfgraph = df[['country', 'year', 'co2']]
+
+#the graph will only use the data from 1980, so filter here already.
+dfgraph = dfgraph[dfgraph['year']>=1980] 
 
 print(dfgraph.head())
 
@@ -151,10 +154,6 @@ for i in range(0,dfgraphfctemp.index.size):
         aim_reduction_abs = dfgraphfctemp.iat[i,3]*aim_reduction
     else:
         dfgraphfctemp.iat[i,3] = dfgraphfctemp.iat[i-1,3]-aim_reduction_abs
-
-# get the value for each 2015 and complete the next 36 lines based on it.
-#for y2015 in dfgraphfctemp[pd.notnull(dfgraphfctemp['co2_path'])==True]:
-#    print(y2015)
         
 # Merge dfgraphfctemp into dfgraphfc
 dfgraphfc['co2_path'] = dfgraphfctemp['co2_path']
@@ -168,7 +167,7 @@ dfgraphfc = dfgraphfc.set_index('country')
 selected_countries = ['World','Australia','Brazil','Canada','China','EU-27',
                       'India','Indonesia','Japan','Mexico','Nigeria','Russia',
                       'Saudi Arabia','South Africa','South Korea',
-                      'Switzerland','Turkey','United States',]
+                      'Switzerland','Turkey','United Kingdom','United States',]
 
 #%%
 #Bokeh
@@ -177,18 +176,18 @@ source = ColumnDataSource(dfgraphfc)
 render = ColumnDataSource({
         "year": dfgraphfc.loc['World']["year"],
         "co2": dfgraphfc.loc['World']["co2"],
-        "co2_path": dfgraphfc.loc['World']["co2_path"],}
-)
+        "co2_path": dfgraphfc.loc['World']["co2_path"],})
 
 title = 'World'
 
 # create a new plot (with a title) using figure
-p = figure(aspect_ratio=2, sizing_mode='scale_height', title=title,
-           x_range=Range1d(1980, 2050, bounds=(None,2050)),
-           tools=[PanTool(dimensions='width'), SaveTool(), ResetTool()])
+p = figure(title=title, aspect_ratio=2, sizing_mode='scale_height',
+           x_range=Range1d(1980, 2050, bounds=(1980,2050)),
+           tools=[SaveTool(), ResetTool()]) #PanTool(dimensions='width') 
 
 # add three lines renderer
-p.line("year", "co2", source=render, line_width=2, legend_label='CO2 emissions', line_alpha=0.9)
+p.line("year", "co2", source=render, line_width=2, legend_label='CO2 emissions',
+       line_alpha=0.9)
 p.line("year", "co2_path", source=render, line_width=2, color = 'red',
        legend_label='Path to netzero in 2050', line_alpha=0.9)
 COP21 = Span(location=2015, dimension='height', line_color='green',
@@ -198,7 +197,7 @@ p.add_layout(COP21)
 # Appearance
 p.xaxis.ticker = BasicTicker(base=5, max_interval = 5)
 p.xaxis.axis_label = 'Year'
-p.yaxis.axis_label = 'CO2 emissions [mio of tons]'
+p.yaxis.axis_label = 'Net CO2 emissions [mio of tons]'
 p.add_layout(Label(x=2016, text='COP21', text_color='green'))
     
 # Dropdown     
