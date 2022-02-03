@@ -18,7 +18,6 @@ a:visited, a:active, a:link{
 }
 #graph{
 	height: 75%;
-	min-height: 400px;
 }
 iframe{
 	width: 100%;
