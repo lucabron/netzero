@@ -1,5 +1,6 @@
 # Packages used are numpy, pandas and bokeh. They can be found on pip and conda.
 from os.path import dirname, join
+import statistics as s
 
 import numpy as np
 import pandas as pd
@@ -69,6 +70,15 @@ dfgraph = dfgraph[dfgraph['year']>=1980]
 print(dfgraph.head())
 
 #%%
+# reduce ammount of country to be seleceted in the graph for UX purpose (temporary)
+selected_countries = ['World','Australia','Brazil','Canada','China','EU-27',
+                      'India','Indonesia','Japan','Mexico','Nigeria','Russia',
+                      'Saudi Arabia','South Africa','South Korea',
+                      'Switzerland','Turkey','United Kingdom','United States',]
+
+dfgraph = dfgraph[dfgraph['country'].isin(selected_countries)]
+
+#%%
 # Countries with missing values for co2
 print(dfgraph[pd.isnull(dfgraph['co2'])==True]) 
 dfgraphtemp = dfgraph[pd.isnull(dfgraph['co2'])==True]
@@ -84,7 +94,7 @@ print(dfgraphtemp['country'].unique())
 # Namibia #no data
 
 print('-------')
-dfgraphtemp = dfgraph[dfgraph['year'].isin([2015,2019])]
+dfgraphtemp = dfgraph[dfgraph['year'].isin([2015])]
 print(dfgraphtemp[dfgraphtemp['co2'].isna()])
 
 #%%
@@ -140,7 +150,7 @@ aim_reduction = 1/(2050-2015)
 dfgraphfc = dfgraphfc.sort_values(by=['country','year'])
 dfgraphfc = dfgraphfc.reset_index(drop=True)
 
-# Getting the 2015 value
+# Create new column and get 2015 value
 dfgraphfc['co2_path'] = dfgraphfc[dfgraphfc['year']==2015]['co2']
 # Creating a temporary dataframe to only get the value for forecast and
 # loop more easily.
@@ -159,15 +169,50 @@ for i in range(0,dfgraphfctemp.index.size):
 dfgraphfc['co2_path'] = dfgraphfctemp['co2_path']
 
 #%%
+# linear regression
+# Create new column and get 2015 value
+dfgraphfctemp2 = dfgraphfc.copy()
+dfgraphfctemp2['co2_OLS'] = dfgraphfctemp2[dfgraphfctemp2['year']==2015]['co2']
+
+# Creating a temporary dataframe to only get the value for forecast and
+# loop more easily.
+dfgraphfctemp2 = dfgraphfctemp2[(dfgraphfctemp2['year']<=current_year) &
+                          (dfgraphfctemp2['year']>= 2015)]
+
+# Selects sub-graphs based on countries, find the OLS values and regroup
+# them together in a big graph. It might need to be refactored in a better way.
+
+dfgraphfctemp3 = []
+dfgraphfctemp4 = []
+    
+for country in list_countries:
+    dfgraphfctemp3 = dfgraphfctemp2[dfgraphfctemp2['country']==country]
+    alpha = dfgraphfctemp3.iloc[0,2]
+    X = dfgraphfctemp3['year'][0:6]-2015
+    Y = dfgraphfctemp3['co2'][0:6]
+
+    # To find beta, need to minimize the residuals which is the same as finding
+    # the minimum of the sum of (yi - alpha - beta*xi)**2
+    # it is the same as solving sum((yi-mean(Y))*((xi-mean(X))) / sum(xi-mean(X))
+    
+    #beta = sum((Y-s.mean(Y))*(X-s.mean(X))) / sum((X-s.mean(X))**2)
+    beta = (s.mean(Y)-alpha)/s.mean(X)
+    #beta = sum((Y-alpha)/X)
+
+    # Calculating the 2016 to current year values based on beta.
+    for i in range(1,dfgraphfctemp3.index.size):
+        dfgraphfctemp3.iat[i,4] = alpha+(dfgraphfctemp3.iat[i,1]-2015)*beta
+
+    dfgraphfctemp4.append(dfgraphfctemp3)
+
+dfgraphfctemp5 = pd.concat(dfgraphfctemp4, ignore_index=True)
+
+# Merge dfgraphfctemp into dfgraphfc
+dfgraphfc = pd.merge(dfgraphfc, dfgraphfctemp5, how='left',
+                     on=['year','country','co2','co2_path'])
+#%%
 #Create Index (Maybe I should have created before. Lazy to refactor now.)
 dfgraphfc = dfgraphfc.set_index('country')
-
-#%%
-# reduce ammount of country to be seleceted in the graph for UX purpose
-selected_countries = ['World','Australia','Brazil','Canada','China','EU-27',
-                      'India','Indonesia','Japan','Mexico','Nigeria','Russia',
-                      'Saudi Arabia','South Africa','South Korea',
-                      'Switzerland','Turkey','United Kingdom','United States',]
 
 #%%
 #Bokeh
@@ -176,7 +221,8 @@ source = ColumnDataSource(dfgraphfc)
 render = ColumnDataSource({
         "year": dfgraphfc.loc['World']["year"],
         "co2": dfgraphfc.loc['World']["co2"],
-        "co2_path": dfgraphfc.loc['World']["co2_path"],})
+        "co2_path": dfgraphfc.loc['World']["co2_path"],
+        "co2_OLS": dfgraphfc.loc['World']["co2_OLS"],})
 
 title = 'World'
 
@@ -185,11 +231,13 @@ p = figure(title=title, aspect_ratio=2, sizing_mode='scale_height',
            x_range=Range1d(1980, 2050, bounds=(1980,2050)),
            tools=[SaveTool(), ResetTool()]) #PanTool(dimensions='width') 
 
-# add three lines renderer
+# add four lines renderer
 p.line("year", "co2", source=render, line_width=2, legend_label='CO2 emissions',
        line_alpha=0.9)
 p.line("year", "co2_path", source=render, line_width=2, color = 'red',
        legend_label='Path to netzero in 2050', line_alpha=0.9)
+p.line("year", "co2_OLS", source=render, line_width=2, line_dash='dashed',
+       color = 'red', legend_label='Current path', line_alpha=0.9)
 COP21 = Span(location=2015, dimension='height', line_color='green',
              line_dash='dotted', line_width=2)
 p.add_layout(COP21)
@@ -214,24 +262,28 @@ var country=data['country'];
 var a=data['year'];
 var b=data['co2'];
 var c=data['co2_path'];
+var d=data['co2_OLS'];
 
 var f=select.value;
 
 var x=[];
 var y=[];
 var z=[];
+var q=[];
 
 for(var i=0;i<a.length; i++){
         if(country[i]==f){
                          x.push(a[i]);
                          y.push(b[i]);
                          z.push(c[i]);
+                         q.push(d[i]);
                     }
         }
 
 render.data['year']=x;
 render.data['co2']=y;
 render.data['co2_path']=z;
+render.data['co2_OLS']=q;
 
 // Apply change
 render.change.emit();
