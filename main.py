@@ -14,7 +14,6 @@ from bokeh.layouts import column
 pd.set_option('max_columns', None)
 
 #%%
-#pd.read_csv(join(dirname(__file__), 'data/2015_weather.csv'))
 df = pd.read_csv(join(dirname(__file__),'data','owid-co2-data.csv'))
 
 #%%
@@ -46,16 +45,35 @@ df = df[['iso_code',
  'population',
  'gdp']]
 
-# # delete irelevant countries
-# ## Need to remove Bhutan and Suriname as they already reached net-zero.
-# International transport
-# Kuwaiti Oil Fires
-# Panama Canal Zone
-# French Equatorial Africa
-# French West Africa
-
-excluded = df[df['country'].isin(['Kuwaiti Oil Fires','Panama Canal Zone'])].index
+#%%
+# Delete irelevant countries by only keeping the ones who ratified the agreement.
+excluded = df[df['country'].isin(['Africa','Anguilla', 'Antarctica','Aruba',
+                                  'Asia', 'Asia (excl. China & India)',
+                                  'Bermuda', 'Bonaire Sint Eustatius and Saba',
+                                  'British Virgin Islands', 'Christmas Island',
+                                  'Curacao', 'Eritrea', 'EU-28', 'Europe',
+                                  'Europe (excl. EU-27)', 'Europe (excl. EU-28)',
+                                  'Faeroe Islands','French Equatorial Africa',
+                                  'French Guiana', 'French Polynesia',
+                                  'French West Africa', 'Greenland',
+                                  'Guadeloupe', 'Hong Kong',
+                                  'International transport', 'Iran', 'Kosovo',
+                                  'Kuwaiti Oil Fires', 'Leeward Islands',
+                                  'Libya', 'Macao', 'Martinique', 'Mayotte',
+                                  'Micronesia', 'Montserrat', 'New Caledonia',
+                                  'North America', 'North America (excl. USA)',
+                                  'Oceania', 'Panama Canal Zone',
+                                  'Puerto Rico', 'Reunion', 'Ryukyu Islands',
+                                  'Saint Helena', 'St. Kitts-Nevis-Anguilla',
+                                  'Saint Pierre and Miquelon',
+                                  'Sint Maarten (Dutch part)', 'South America',
+                                  'Taiwan', 'Turks and Caicos Islands',
+                                  'Wallis and Futuna', 'Yemen'
+                                  ])].index
 df.drop(excluded, inplace=True)
+
+# change Micronesia name to make it smart
+df = df.replace('Micronesia (country)','Micronesia')
 
 print(df.head())
 print(df.isnull().sum()) #There is missing data for CO2
@@ -70,15 +88,6 @@ dfgraph = dfgraph[dfgraph['year']>=1980]
 print(dfgraph.head())
 
 #%%
-# reduce ammount of country to be seleceted in the graph for UX purpose (temporary)
-selected_countries = ['World','Australia','Brazil','Canada','China','EU-27',
-                      'India','Indonesia','Japan','Mexico','Nigeria','Russia',
-                      'Saudi Arabia','South Africa','South Korea',
-                      'Switzerland','Turkey','United Kingdom','United States',]
-
-dfgraph = dfgraph[dfgraph['country'].isin(selected_countries)]
-
-#%%
 # Countries with missing values for co2
 print(dfgraph[pd.isnull(dfgraph['co2'])==True]) 
 dfgraphtemp = dfgraph[pd.isnull(dfgraph['co2'])==True]
@@ -86,27 +95,28 @@ print('-------')
 print(dfgraphtemp['country'].unique())
 
 # # Countries with missing values
-# "Cote d'Ivoire" #no data
-# Palau #no data
-# Eritrea #no data
-# Marshall Islands #no data
-# Micronesia #no data
-# Namibia #no data
-
-print('-------')
-dfgraphtemp = dfgraph[dfgraph['year'].isin([2015])]
-print(dfgraphtemp[dfgraphtemp['co2'].isna()])
+# Marshall Islands
+# Namibia
 
 #%%
-#Ivory Coast and Palau have missing data for 2015.
-#They have for 2017, so I might add them back later.
-dfgraph = dfgraph[-dfgraph['country'].isin(["Cote d'Ivoire","Palau"])]
-# dfgraph = dfgraph.groupby('country')
+#Marshall Islands and Namibia have missing CO2 data.
+#As they break the loop later, they are removed
+#(their contribution is 0.01% of total so it is not a big difference)
+dfgraph = dfgraph[-dfgraph['country'].isin(["Marshall Islands","Namibia"])]
+
+#%%
+# This code can reduce the number of countries displayed.
+selected_countries = dfgraph['country'].unique()
+#['World','Australia','Brazil','Canada','China','EU-27',
+#                      'India','Indonesia','Japan','Mexico','Nigeria','Russia',
+#                      'Saudi Arabia','South Africa','South Korea',
+#                      'Switzerland','Turkey','United Kingdom','United States',]
+#dfgraph = dfgraph[dfgraph['country'].isin(selected_countries)]
 
 #%%
 #create the new rows for the forecast
 dfgraphcolumns_list = list(dfgraph)
-list_countries = list(dfgraphtemp['country'].unique())
+list_countries = list(selected_countries)
 current_year = dfgraph['year'].max()
 nb_years = 2050-current_year+1 #number of years to forecast
 dfgraphfc = dfgraph.copy()
@@ -181,7 +191,6 @@ dfgraphfctemp2 = dfgraphfctemp2[(dfgraphfctemp2['year']<=current_year) &
 
 # Selects sub-graphs based on countries, find the OLS values and regroup
 # them together in a big graph. It might need to be refactored in a better way.
-
 dfgraphfctemp3 = []
 dfgraphfctemp4 = []
     
@@ -208,6 +217,7 @@ dfgraphfctemp5 = pd.concat(dfgraphfctemp4, ignore_index=True)
 # Merge dfgraphfctemp into dfgraphfc
 dfgraphfc = pd.merge(dfgraphfc, dfgraphfctemp5, how='left',
                      on=['year','country','co2','co2_path'])
+
 #%%
 #Create Index (Maybe I should have created before. Lazy to refactor now.)
 dfgraphfc = dfgraphfc.set_index('country')
@@ -247,7 +257,7 @@ p.yaxis.axis_label = 'Net CO2 emissions [mio of tons]'
 p.add_layout(Label(x=2016, text='COP21', text_color='green'))
     
 # Dropdown     
-select = Select(title="Country:", value="World", options=selected_countries,
+select = Select(title="Country:", value="World", options=list_countries,
                 width = 300)
 
 # Interactively change the lines. It uses javascript callbacks
@@ -302,3 +312,13 @@ output_file(join(dirname(__file__),'graph.html'), title='Bokeh plot: Objective n
 
 show(layout)
 #curdoc().add_root(layout) # show the results if using a bokeh server
+
+#%%
+df2020 = dfgraphfc[dfgraphfc['year']==2020] 
+df2020 = df2020.round().astype(np.int64)
+html = df2020.to_html()
+ 
+# write html to file
+text_file = open("table.html", "w")
+text_file.write(html)
+text_file.close()
