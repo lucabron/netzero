@@ -97,12 +97,7 @@ print(dfgraphtemp['country'].unique())
 # # Countries with missing values
 # Marshall Islands
 # Namibia
-
-#%%
-#Marshall Islands and Namibia have missing CO2 data.
-#As they break the loop later, they are removed
-#(their contribution is 0.01% of total so it is not a big difference)
-dfgraph = dfgraph[-dfgraph['country'].isin(["Marshall Islands","Namibia"])]
+# Some countries don't have data from 1980, but it is fine.
 
 #%%
 # This code can reduce the number of countries displayed.
