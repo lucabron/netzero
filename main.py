@@ -238,9 +238,9 @@ p = figure(title=title, aspect_ratio=2, sizing_mode='scale_height',
 p.line("year", "co2", source=render, line_width=2, legend_label='CO2 emissions',
        line_alpha=0.9)
 p.line("year", "co2_path", source=render, line_width=2, color = 'red',
-       legend_label='Path to netzero in 2050', line_alpha=0.9)
+       legend_label='Path to net zero in 2050', line_alpha=0.9)
 p.line("year", "co2_OLS", source=render, line_width=2, line_dash='dashed',
-       color = 'red', legend_label='Current path', line_alpha=0.9)
+       color = 'red', legend_label='Current path (regression)', line_alpha=0.9)
 COP21 = Span(location=2015, dimension='height', line_color='green',
              line_dash='dotted', line_width=2)
 p.add_layout(COP21)
@@ -305,13 +305,25 @@ layout = column(select, p)
 
 output_file(join(dirname(__file__),'graph.html'), title='Bokeh plot: Objective net zero carbon emissions 2050')
 
-show(layout)
+#show(layout) #use this for development
 #curdoc().add_root(layout) # show the results if using a bokeh server
 
 #%%
-df2020 = dfgraphfc[dfgraphfc['year']==2020] 
-df2020 = df2020.round().astype(np.int64)
-html = df2020.to_html()
+# Generate the table based on the current_year
+dflastyear = dfgraphfc[dfgraphfc['year']==current_year]
+dflastyear = dflastyear.drop('year', axis=1)                
+
+# Add a column for the difference betweehn current path an target path
+dflastyear['Difference'] = dflastyear['co2_OLS']-dflastyear['co2_path']
+dflastyear['Percent Diff.'] = (dflastyear['co2_OLS']/dflastyear['co2_path']-1)*100
+dflastyear = dflastyear.round({'co2': 2, 'co2_path': 2, 'co2_OLS': 2,
+                               'Difference': 2, 'Percent Diff.': 1})
+
+dflastyear = dflastyear.rename(columns={"co2": "CO2", "co2_path": "CO2 Path",
+                                        "co2_OLS": "Current Path"})
+dflastyear['Percent Diff.'] = dflastyear['Percent Diff.'].map("{:,.2f}%".format)
+
+html = dflastyear.to_html()
  
 # write html to file
 text_file = open("table.html", "w")

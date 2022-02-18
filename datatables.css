@@ -1,0 +1,12 @@
+table.dataTable {
+  table-layout: fixed;
+  width: 100%:
+}
+th{
+	background-color: #f2f2f2;
+}
+
+th, tr {
+	text-align: center;
+}
+

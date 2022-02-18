@@ -1,17 +1,15 @@
 /*.leaflet-container{background-color:#c5e8ff;}*/
 html,body{
 	height: 100%;
-	background-color: #FBFBEE;
+	background-color: #FBFBF3;
 }
-h1{
-	margin-bottom: 0px;
-}
-h1, h2, p{
-	color: #13182C;
-}
-p
+
+p, h1, h2
 {
 	text-align: justify;
+	margin-bottom: 8px;
+	margin-top: 8px;
+	color: #13182C;
 }
 a:visited, a:active, a:link{
   text-decoration: none;
