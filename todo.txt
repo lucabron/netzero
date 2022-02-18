@@ -2,13 +2,13 @@ Get the right map and understand the country format [done]
 
 filter out countries. There is three sources for country: co2 data, pledge and geojson map.
 get net emissions. Should I find a new dataset? [done (emissions were already net)]
-get target goals (optional)
+get target goals (optional) 
 get reduction per year needed (optional) [done]
 get it in percent (optional) [done]
 get it per capita (optional) 
 get it per GDP (optional)
 Create a new column that starts in 2015 and ends in 2050 to show the path. [done]
-find difference between straight line and observed.
+find difference between straight line and observed. [done]
 map how far the country is to the objective. use a regression. [done]
 Create regression from already existing empty cells from 2020 to 2050. [done]
 Add checbox for ghg. data up to 2016 are in the owid dataset. For more recent (up to 2018), search CAIT, PIK and maybe UNFCCC datasets
@@ -21,7 +21,7 @@ Create pledge map (what countries pledged to achieve). Already done by https://z
 
 Create other vizualisations than graph 
 - Hover over countries for details
-- Table
+- Table [done]
 
 Host on github (at least initially) [done]
 
