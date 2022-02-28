@@ -1,4 +1,4 @@
-<h1>Objective net-zero 2050</h1>
+<h1>Objective Net Zero 2050</h1>
 Demo website: https://lucabron.github.io/netzero/
 <hr>
 <p>On the 12th of December 2015 during the COP21 in Paris, 196 nations agreed to reach carbon neutrality by 2050.</br>
@@ -18,6 +18,9 @@ But to for the goal of 1.5 degree celsius to be reached, global net-zero needs t
 Therefore, to facilitate the comprehension and the comparison of the data vizualisation, the carbon neutral target is 2050 for all countries.</p>
 <hr>
 <p><i><a href="https://en.wikipedia.org/wiki/List_of_parties_to_the_Paris_Agreement">*Eritrea, Iran, Lybia and Yemen have signed but did not ratify it.</a></i></p>	
-<p><cite>Data Source: <a href='https://github.com/owid/co2-data'>Our World In Data</a> / Hannah Ritchie and Max Roser (2020) - "CO₂ and Greenhouse Gas Emissions". Published online at OurWorldInData.org.</cite></p>
+<cite>Data Source: <a href='https://github.com/owid/co2-data'>Our World In Data</a> / Hannah Ritchie and Max Roser (2020) - "CO₂ and Greenhouse Gas Emissions". Published online at OurWorldInData.org.</cite>
+<p><a href="https://ourworldindata.org/co2-emissions">More CO2 data vizualisation</a><br>
+<a href="https://eciu.net/netzerotracker">Each country's net zero pledge</a><br>
+<a href="https://zerotracker.net/">Countries and companies' pledges</a></p>
 <!-- Interactive world map data visualization of each country effort toward net-zero emission.
 Using Mapbox and GeoJson. Interactive graphs made using bokeh.-->
