@@ -5,10 +5,9 @@ import statistics as s
 import numpy as np
 import pandas as pd
 from bokeh.plotting import show, figure, output_file
-from bokeh.models import CustomJS, ColumnDataSource
-from bokeh.models import BasicTicker, Label, Span, Range1d
-from bokeh.models import Select
-from bokeh.models.tools import SaveTool, ResetTool
+from bokeh.models import CustomJS, ColumnDataSource,BasicTicker, Label, Span
+from bokeh.models import Range1d, Select
+from bokeh.models.tools import SaveTool, HoverTool
 from bokeh.layouts import column
 
 pd.set_option('max_columns', None)
@@ -232,16 +231,25 @@ title = 'World'
 # create a new plot (with a title) using figure
 p = figure(title=title, aspect_ratio=2, sizing_mode='scale_height',
            x_range=Range1d(1980, 2050, bounds=(1980,2050)),
-           tools=[SaveTool(), ResetTool()]) #PanTool(dimensions='width') 
+           tools=[SaveTool()]) 
 
 # add four lines renderer
-p.line("year", "co2", source=render, line_width=2, legend_label='CO2 emissions',
-       line_alpha=0.9)
-p.line("year", "co2_OLS", source=render, line_width=2,
+plot1 = p.line("year", "co2", source=render, line_width=3,
+                  legend_label='CO2 emissions', line_alpha=0.9)
+p.add_tools(HoverTool(renderers=[plot1], tooltips=[
+        ('Year', '@year'),
+        ('CO2 emissions', '@co2{0.0}')]))    
+plot2 = p.line("year", "co2_OLS", source=render, line_width=3,
        color = 'red', legend_label='Current trend (regression)', line_alpha=0.9)
-p.line("year", "co2_path", source=render, line_width=2, color = 'red',
+p.add_tools(HoverTool(renderers=[plot2], tooltips=[
+        ('Year', '@year'),
+        ('CO2 Trend', '@co2_OLS{0.0}'),]))
+plot3 = p.line("year", "co2_path", source=render, line_width=3, color = 'red',
        line_dash='dashed', legend_label='Target to reach net zero',
        line_alpha=0.9)
+p.add_tools(HoverTool(renderers=[plot3], tooltips=[
+        ('Year', '@year'),
+        ('CO2 Target', '@co2_path{0.0}')]))
 COP21 = Span(location=2015, dimension='height', line_color='green',
              line_dash='dotted', line_width=2)
 p.add_layout(COP21)
@@ -251,6 +259,9 @@ p.xaxis.ticker = BasicTicker(base=5, max_interval = 5)
 p.xaxis.axis_label = 'Year'
 p.yaxis.axis_label = 'Net CO2 emissions [mio of tons]'
 p.add_layout(Label(x=2016, text='COP21', text_color='green'))
+
+# Hover tool
+
     
 # Dropdown     
 select = Select(title="Country:", value="World", options=list_countries,
@@ -310,6 +321,7 @@ show(layout) #use this for development
 #curdoc().add_root(layout) # show the results if using a bokeh server
 
 #%%
+# graph html export
 # Generate the table based on the current_year
 dflastyear = dfgraphfc[dfgraphfc['year']==current_year]
 dflastyear = dflastyear.drop('year', axis=1)                

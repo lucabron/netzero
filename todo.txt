@@ -19,13 +19,15 @@ Learn about what license to use and how they protect me. Ask for help.
 
 Create pledge map (what countries pledged to achieve). Already done by https://zerotracker.net/
 
-Create other vizualisations than graph 
-- Hover over countries for details
+Create other vizualisations than graph [done]
+- Hover over countries for details [done]
 - Table [done]
 
 Host on github (at least initially) [done]
 
 Explain methodology on about page [done]
+
+Showcase on https://discourse.bokeh.org/
 
 Find sponsor and create sponsor space on about page.
 
