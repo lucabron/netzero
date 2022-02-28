@@ -21,6 +21,7 @@ Therefore, to facilitate the comprehension and the comparison of the data vizual
 <cite>Data Source: <a href='https://github.com/owid/co2-data'>Our World In Data</a> / Hannah Ritchie and Max Roser (2020) - "CO₂ and Greenhouse Gas Emissions". Published online at OurWorldInData.org.</cite>
 <p><a href="https://ourworldindata.org/co2-emissions">More CO2 data vizualisation</a><br>
 <a href="https://eciu.net/netzerotracker">Each country's net zero pledge</a><br>
-<a href="https://zerotracker.net/">Countries and companies' pledges</a></p>
+<a href="https://zerotracker.net/">Countries and companies' pledges</a><br>
+<a href="https://climateactiontracker.org/">More detailed view on each countries path to net zero</a></p>
 <!-- Interactive world map data visualization of each country effort toward net-zero emission.
 Using Mapbox and GeoJson. Interactive graphs made using bokeh.-->
