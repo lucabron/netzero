@@ -240,7 +240,7 @@ p.add_tools(HoverTool(renderers=[plot1], tooltips=[
         ('Year', '@year'),
         ('CO2 emissions', '@co2{0.0}')]))    
 plot2 = p.line("year", "co2_OLS", source=render, line_width=3,
-       color = 'red', legend_label='Current trend (regression)', line_alpha=0.9)
+       color = 'red', legend_label='CO2 trend (regression)', line_alpha=0.9)
 p.add_tools(HoverTool(renderers=[plot2], tooltips=[
         ('Year', '@year'),
         ('CO2 Trend', '@co2_OLS{0.0}'),]))
