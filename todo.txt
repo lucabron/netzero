@@ -27,6 +27,8 @@ Host on github (at least initially) [done]
 
 Explain methodology on about page [done]
 
+Google analytics
+
 Showcase on https://discourse.bokeh.org/
 
 Find sponsor and create sponsor space on about page.
