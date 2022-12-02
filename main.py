@@ -340,7 +340,7 @@ dflastyear = dflastyear.drop('year', axis=1)
 # Rearrange columns
 dflastyear = dflastyear[['co2','co2_OLS','co2_path']]
 
-# Add a column for the difference betweehn current path an target path
+# Add a column for the difference between current path an target path
 dflastyear['Difference'] = dflastyear['co2_OLS']-dflastyear['co2_path']
 dflastyear['Percent Diff.'] = (dflastyear['co2_OLS']/dflastyear['co2_path']-1)*100
 dflastyear = dflastyear.round({'co2': 2, 'co2_path': 2, 'co2_OLS': 2,
@@ -353,6 +353,6 @@ dflastyear['Percent Diff.'] = dflastyear['Percent Diff.'].map("{:,.2f}%".format)
 html = dflastyear.to_html()
  
 # write html to file
-text_file = open("table.html", "w")
-text_file.write(html)
-text_file.close()
+html_file = open("table.html", "w")
+html_file.write(html)
+html_file.close()
