@@ -45,28 +45,42 @@ df = df[['iso_code',
  'gdp']]
 
 #%%
-# Delete irelevant countries by only keeping the ones who ratified the agreement.
-excluded = df[df['country'].isin(['Africa','Anguilla', 'Antarctica','Aruba',
-                                  'Asia', 'Asia (excl. China & India)',
+# Delete irelevant countries by only keeping the ones who ratified the agreement
+# and the ones with data
+excluded = df[df['country'].isin(['Africa (GCP)', 'Aland Islands', 'Anguilla',
+                                  'Antarctica','Aruba',
+                                  'Asia (GCP)', 'Asia (excl. China and India)',
                                   'Bermuda', 'Bonaire Sint Eustatius and Saba',
-                                  'British Virgin Islands', 'Christmas Island',
+                                  'British Virgin Islands',
+                                  'Central America (GCP)', 'Christmas Island',
                                   'Curacao', 'Eritrea', 'EU-28', 'Europe',
-                                  'Europe (excl. EU-27)', 'Europe (excl. EU-28)',
+                                  'Europe (GCP)', 'European Union (27)',
+                                  'European Union (27) (GCP)',
+                                  'European Union (28)',
                                   'Faeroe Islands','French Equatorial Africa',
                                   'French Guiana', 'French Polynesia',
                                   'French West Africa', 'Greenland',
-                                  'Guadeloupe', 'Hong Kong',
+                                  'Guadeloupe', 'High-income countries',
+                                  'Hong Kong',
                                   'International transport', 'Iran', 'Kosovo',
-                                  'Kuwaiti Oil Fires', 'Leeward Islands',
-                                  'Libya', 'Macao', 'Martinique', 'Mayotte',
-                                  'Micronesia', 'Montserrat', 'New Caledonia',
-                                  'North America', 'North America (excl. USA)',
-                                  'Oceania', 'Panama Canal Zone',
+                                  'Kuwaiti Oil Fires', 'Kuwaiti Oil Fires (GCP)',
+                                  'Leeward Islands',
+                                  'Libya', 'Low-income countries',
+                                  'Lower-middle-income countries',
+                                  'Macao', 'Martinique', 'Mayotte',
+                                  'Micronesia','Middle East (GCP)',
+                                  'Montserrat', 'New Caledonia',
+                                  'North America', 'Non-OECD (GCP)',
+                                  'North America (GCP)', 'OECD (GCP)',
+                                  'Oceania (GCP)', 'Panama Canal Zone',
                                   'Puerto Rico', 'Reunion', 'Ryukyu Islands',
                                   'Saint Helena', 'St. Kitts-Nevis-Anguilla',
+                                  'St. Kitts-Nevis-Anguilla (GCP)',
                                   'Saint Pierre and Miquelon',
-                                  'Sint Maarten (Dutch part)', 'South America',
+                                  'Sint Maarten (Dutch part)',
+                                  'South America (GCP)',
                                   'Taiwan', 'Turks and Caicos Islands',
+                                  'Upper-middle-income countries',
                                   'Wallis and Futuna', 'Yemen'
                                   ])].index
 df.drop(excluded, inplace=True)
@@ -74,7 +88,6 @@ df.drop(excluded, inplace=True)
 # change Micronesia name to make it smart
 df = df.replace('Micronesia (country)','Micronesia')
 
-print(df.head())
 print(df.isnull().sum()) #There is missing data for CO2
 
 #%%
@@ -88,15 +101,13 @@ print(dfgraph.head())
 
 #%%
 # Countries with missing values for co2
-print(dfgraph[pd.isnull(dfgraph['co2'])==True]) 
 dfgraphtemp = dfgraph[pd.isnull(dfgraph['co2'])==True]
 print('-------')
 print(dfgraphtemp['country'].unique())
 
-# # Countries with missing values
-# Marshall Islands
-# Namibia
-# Some countries don't have data from 1980, but it is fine.
+#%%
+# Some countries don't have data from 1980
+dfgraph = dfgraph.dropna() #this will drop them
 
 #%%
 # This code can reduce the number of countries displayed.
