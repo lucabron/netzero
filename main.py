@@ -249,34 +249,35 @@ p = figure(title=title, aspect_ratio=2, sizing_mode='scale_height',
            tools=[SaveTool()]) 
 
 # add four lines renderer
-plot1 = p.line("year", "co2", source=render, line_width=3,
+plot1 = p.line("year", "co2", source=render, line_width=5,
                   legend_label='CO2 emissions', line_alpha=0.9)
 p.add_tools(HoverTool(renderers=[plot1], tooltips=[
         ('Year', '@year'),
         ('CO2 emissions', '@co2{0.0}')]))    
-plot2 = p.line("year", "co2_OLS", source=render, line_width=3,
+plot2 = p.line("year", "co2_OLS", source=render, line_width=5,
        color = 'red', legend_label='CO2 trend (regression)', line_alpha=0.9)
 p.add_tools(HoverTool(renderers=[plot2], tooltips=[
         ('Year', '@year'),
         ('CO2 Trend', '@co2_OLS{0.0}'),]))
-plot3 = p.line("year", "co2_path", source=render, line_width=3, color = 'red',
+plot3 = p.line("year", "co2_path", source=render, line_width=5, color = 'red',
        line_dash='dashed', legend_label='Target to reach net zero',
-       line_alpha=0.9)
+       line_alpha=0.8)
 p.add_tools(HoverTool(renderers=[plot3], tooltips=[
         ('Year', '@year'),
         ('CO2 Target', '@co2_path{0.0}')]))
 COP21 = Span(location=2015, dimension='height', line_color='green',
-             line_dash='dotted', line_width=2)
+             line_dash='dotted', line_width=4)
 p.add_layout(COP21)
 
 # Appearance
 p.xaxis.ticker = BasicTicker(base=5, max_interval = 5)
 p.xaxis.axis_label = 'Year'
 p.yaxis.axis_label = 'Net CO2 emissions [mio of tons]'
+p.xaxis.axis_label_text_font_size = "1.5em"
+p.yaxis.axis_label_text_font_size = "1.5em"
+p.xaxis.major_label_text_font_size = "1.3em"
+p.yaxis.major_label_text_font_size = "1.3em"
 p.add_layout(Label(x=2016, text='COP21', text_color='green'))
-
-# Hover tool
-
     
 # Dropdown     
 select = Select(title="Country:", value="World", options=list_countries,
