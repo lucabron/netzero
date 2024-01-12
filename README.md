@@ -18,7 +18,7 @@ But to for the goal of 1.5 degree celsius to be reached, global net-zero needs t
 Therefore, to facilitate the comprehension and the comparison of the data vizualisation, the carbon neutral target is 2050 for all countries.</p>
 <hr>
 <p><i><a href="https://en.wikipedia.org/wiki/List_of_parties_to_the_Paris_Agreement">*Eritrea, Iran, Lybia and Yemen have signed but did not ratify it.</a></i></p>	
-<cite>Data Source: <a href='https://github.com/owid/co2-data'>Our World In Data</a> / Hannah Ritchie and Max Roser (2020) - "CO₂ and Greenhouse Gas Emissions". Published online at OurWorldInData.org.</cite>
+<cite>Data Source: <a href='https://github.com/owid/co2-data'>Our World In Data</a> / Hannah Ritchie, Pablo Rosado and Max Roser (2023) - “CO2 and Greenhouse Gas Emissions” Published online at OurWorldInData.org.</cite>
 <p><a href="https://ourworldindata.org/co2-emissions">More CO2 data vizualisation</a><br>
 <a href="https://eciu.net/netzerotracker">Each country's net zero pledge</a><br>
 <a href="https://zerotracker.net/">Countries and companies' pledges</a><br>
