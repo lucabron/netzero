@@ -10,7 +10,7 @@ from bokeh.models import Range1d, Select
 from bokeh.models.tools import SaveTool, HoverTool
 from bokeh.layouts import column
 
-pd.set_option('max_columns', None)
+# pd.set_option('max_columns', None)
 
 #%%
 df = pd.read_csv(join(dirname(__file__),'data','owid-co2-data.csv'))
@@ -65,7 +65,8 @@ excluded = df[df['country'].isin(['Africa', 'Africa (GCP)', 'Aland Islands',
                                   'French West Africa', 'Greenland',
                                   'Guadeloupe', 'High-income countries',
                                   'Hong Kong',
-                                  'International transport', 'Iran', 'Kosovo',
+                                  'International shipping', 'International aviation'
+                                  , 'Iran', 'Kosovo',
                                   'Kuwaiti Oil Fires', 'Kuwaiti Oil Fires (GCP)',
                                   'Leeward Islands',
                                   'Libya', 'Low-income countries',
@@ -157,7 +158,8 @@ for country in list_countries:
         zipped = zip(dfgraphcolumns_list, values)
         row_dict = dict(zipped)
         data.append(row_dict)
-dfgraphfc = dfgraphfc.append(data, True)
+# dfgraphfc = dfgraphfc.append(pd.DataFrame(data), True)
+dfgraphfc = pd.concat([dfgraphfc, pd.DataFrame(data)], ignore_index=True)
 print(dfgraphfc)
 
 #%%
@@ -225,7 +227,7 @@ dfgraphfctemp5 = pd.concat(dfgraphfctemp4, ignore_index=True)
 
 # Merge dfgraphfctemp into dfgraphfc
 dfgraphfc = pd.merge(dfgraphfc, dfgraphfctemp5, how='left',
-                     on=['year','country','co2','co2_path'])
+                      on=['year','country','co2','co2_path'])
 
 #%%
 #Create Index (Maybe I should have created before. Lazy to refactor now.)
@@ -244,7 +246,7 @@ render = ColumnDataSource({
 title = 'World'
 
 # create a new plot (with a title) using figure
-p = figure(title=title, aspect_ratio=2, sizing_mode='scale_height',
+p = figure(title=title, sizing_mode="stretch_height", aspect_ratio=2,
            x_range=Range1d(1980, 2050, bounds=(1980,2050)),
            tools=[SaveTool()]) 
 
@@ -277,7 +279,7 @@ p.xaxis.axis_label_text_font_size = "1.5em"
 p.yaxis.axis_label_text_font_size = "1.5em"
 p.xaxis.major_label_text_font_size = "1.3em"
 p.yaxis.major_label_text_font_size = "1.3em"
-p.add_layout(Label(x=2016, text='COP21', text_color='green'))
+p.add_layout(Label(x=2016, y=0.0001, text='COP21', text_color='green'))
     
 # Dropdown     
 select = Select(title="Country:", value="World", options=list_countries,
@@ -328,8 +330,9 @@ select.js_link('value', p.title, 'text')
 #    p.title.text = dfgraphfc[dfgraphfc['country']==select.value]
 #    country_selected = select.value
 #    select.options = list(df[country_selected].values)
-    
-layout = column(select, p)
+
+layout = column(children = [select,p], aspect_ratio=2, sizing_mode="stretch_height") 
+# layout = column(children = [select,p], sizing_mode="scale_height") 
 
 output_file(join(dirname(__file__),'graph.html'), title='Bokeh plot: Objective net zero carbon emissions 2050')
 
