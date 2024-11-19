@@ -11,13 +11,13 @@ To achieve this long-term temperature goal, countries aim to reach global peakin
 </blockquote>
 <p>The methodology is simple. Given that all countries have signed the <a href="https://en.wikipedia.org/wiki/Paris_Agreement">Paris Agreement</a>*,
 global emissions should reach <em>net-zero by the middle of the 21st century.</em>
-Therefore, taking the change of CO2 emissions from 2015 to the last available data (currently 2020) and <em>linearly extrapolating</em> until 2050,
+Therefore, taking the change of CO2 emissions from 2015 to the last available data (currently 2023) and <em>linearly extrapolating</em> until 2050,
 we can have an idea if each country is on the right path to reach net-zero.</p>
-<p>Some countries signed the agreement, but didn't pledge for net-zero at 2050, for example China (2060) and India (2070).
+<p>Note: some countries signed the agreement, but didn't pledge for net-zero at 2050, for example China (2060) and India (2070).
 But to for the goal of 1.5 degree celsius to be reached, global net-zero needs to be reached in 2050 <a href="https://www.ipcc.ch/sr15/chapter/spm/">according to the ICPP.</a>
 Therefore, to facilitate the comprehension and the comparison of the data vizualisation, the carbon neutral target is 2050 for all countries.</p>
 <hr>
-<p><i><a href="https://en.wikipedia.org/wiki/List_of_parties_to_the_Paris_Agreement">*Eritrea, Iran, Lybia and Yemen have signed but did not ratify it.</a></i></p>	
+<p><i><a href="https://en.wikipedia.org/wiki/List_of_parties_to_the_Paris_Agreement">* Iran, Lybia and Yemen have signed but did not ratify it.</a></i></p>	
 <cite>Data Source: <a href='https://github.com/owid/co2-data'>Our World In Data</a> / Hannah Ritchie, Pablo Rosado and Max Roser (2023) - “CO2 and Greenhouse Gas Emissions” Published online at OurWorldInData.org.</cite>
 <p><a href="https://ourworldindata.org/co2-emissions">More CO2 data vizualisation</a><br>
 <a href="https://eciu.net/netzerotracker">Each country's net zero pledge</a><br>
