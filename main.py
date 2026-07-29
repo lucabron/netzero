@@ -68,6 +68,7 @@ excluded = df[df['country'].isin(['Africa', 'Africa (GCP)', 'Aland Islands',
                                   'International shipping', 'International aviation'
                                   , 'Iran', 'Kosovo',
                                   'Kuwaiti Oil Fires', 'Kuwaiti Oil Fires (GCP)',
+                                  'Ryukyu Islands (GCP)'
                                   'Leeward Islands',
                                   'Libya', 'Low-income countries',
                                   'Lower-middle-income countries',
