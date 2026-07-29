@@ -208,9 +208,9 @@ dfgraphfctemp4 = []
     
 for country in list_countries:
     dfgraphfctemp3 = dfgraphfctemp2[dfgraphfctemp2['country']==country]
-    alpha = dfgraphfctemp3.iloc[0,2]
-    X = dfgraphfctemp3['year'][0:6]-2015
-    Y = dfgraphfctemp3['co2'][0:6]
+    alpha = dfgraphfctemp3.iloc[0, 2]
+    X = dfgraphfctemp3['year'] - 2015
+    Y = dfgraphfctemp3['co2']
 
     # To find beta, need to minimize the residuals which is the same as finding
     # the minimum of the sum of (Y - alpha - beta*X)**2
@@ -219,8 +219,7 @@ for country in list_countries:
     beta = (s.mean(Y)-alpha)/s.mean(X)
 
     # Calculating the 2016 to current year values based on beta.
-    for i in range(1,dfgraphfctemp3.index.size):
-        dfgraphfctemp3.iat[i,4] = alpha+(dfgraphfctemp3.iat[i,1]-2015)*beta
+    dfgraphfctemp3['co2_OLS'] = alpha + (dfgraphfctemp3['year'] - 2015) * beta
 
     dfgraphfctemp4.append(dfgraphfctemp3)
 
