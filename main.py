@@ -243,6 +243,14 @@ render = ColumnDataSource({
         "co2_path": dfgraphfc.loc['World']["co2_path"],
         "co2_OLS": dfgraphfc.loc['World']["co2_OLS"],})
 
+# Palette aligned on the site: brick for the trend that overshoots, green for
+# the target trajectory, slate for the observed emissions.
+OBSERVED = "#33475B"
+TREND = "#B4472F"
+TARGET = "#2F7A5A"
+NEUTRAL = "#8A8F9C"
+FONT = "Inter, system-ui, sans-serif"
+
 title = 'World'
 
 # create a new plot (with a title) using figure
@@ -251,24 +259,24 @@ p = figure(title=title, sizing_mode="stretch_height", aspect_ratio=2,
            tools=[SaveTool()]) 
 
 # add four lines renderer
-plot1 = p.line("year", "co2", source=render, line_width=5,
-                  legend_label='CO2 emissions', line_alpha=0.9)
+plot1 = p.line("year", "co2", source=render, line_width=4, color=OBSERVED,
+                  legend_label='CO2 emissions', line_alpha=0.95)
 p.add_tools(HoverTool(renderers=[plot1], tooltips=[
         ('Year', '@year'),
         ('CO2 emissions', '@co2{0.0}')]))    
-plot2 = p.line("year", "co2_OLS", source=render, line_width=5,
-       color = 'red', legend_label='CO2 trend (regression)', line_alpha=0.9)
+plot2 = p.line("year", "co2_OLS", source=render, line_width=4,
+       color = TREND, legend_label='CO2 trend (regression)', line_alpha=0.95)
 p.add_tools(HoverTool(renderers=[plot2], tooltips=[
         ('Year', '@year'),
         ('CO2 Trend', '@co2_OLS{0.0}'),]))
-plot3 = p.line("year", "co2_path", source=render, line_width=5, color = 'red',
+plot3 = p.line("year", "co2_path", source=render, line_width=4, color = TARGET,
        line_dash='dashed', legend_label='Target to reach net zero',
-       line_alpha=0.8)
+       line_alpha=0.9)
 p.add_tools(HoverTool(renderers=[plot3], tooltips=[
         ('Year', '@year'),
         ('CO2 Target', '@co2_path{0.0}')]))
-COP21 = Span(location=2015, dimension='height', line_color='green',
-             line_dash='dotted', line_width=4)
+COP21 = Span(location=2015, dimension='height', line_color=NEUTRAL,
+             line_dash='dotted', line_width=3)
 p.add_layout(COP21)
 
 # Appearance
@@ -279,7 +287,27 @@ p.xaxis.axis_label_text_font_size = "1.5em"
 p.yaxis.axis_label_text_font_size = "1.5em"
 p.xaxis.major_label_text_font_size = "1.3em"
 p.yaxis.major_label_text_font_size = "1.3em"
-p.add_layout(Label(x=2016, y=0.0001, text='COP21', text_color='green'))
+p.add_layout(Label(x=2016, y=0.0001, text='COP21', text_color=NEUTRAL,
+                   text_font=FONT, text_font_size='0.85em'))
+
+# Legend back to the top right corner (Bokeh 3.9 defaults to top left) and
+# some breathing room between the axis titles and the tick labels.
+p.legend.location = "top_right"
+p.legend.label_text_font = FONT
+p.legend.border_line_color = None
+p.legend.background_fill_alpha = 0.85
+p.title.text_font = FONT
+
+for axis in (p.xaxis, p.yaxis):
+    axis.axis_label_standoff = 14
+    axis.axis_label_text_font = FONT
+    axis.axis_label_text_font_style = "normal"   # Bokeh defaults to italic
+    axis.major_label_text_font = FONT
+    axis.axis_line_color = "#E3E1D9"
+    axis.major_tick_line_color = "#E3E1D9"
+    axis.minor_tick_line_color = None
+
+p.grid.grid_line_color = "#EFEDE6"
     
 # Dropdown     
 select = Select(title="Country:", value="World", options=list_countries,
@@ -337,6 +365,18 @@ layout = column(children = [select,p], aspect_ratio=2, sizing_mode="stretch_heig
 output_file(join(dirname(__file__),'graph.html'), title='Bokeh plot: Objective net zero carbon emissions 2050')
 
 show(layout) #use this for development
+
+# The chart lives in its own iframe, so it needs its own font link.
+graph_path = join(dirname(__file__), 'graph.html')
+with open(graph_path, encoding='utf-8') as f:
+    graph_html = f.read()
+graph_html = graph_html.replace('<head>', '''<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
+    <style>.bk-input, .bk-input-group, label { font-family: Inter, system-ui, sans-serif; }</style>''', 1)
+with open(graph_path, 'w', encoding='utf-8') as f:
+    f.write(graph_html)
 #curdoc().add_root(layout) # show the results if using a bokeh server
 
 #%%

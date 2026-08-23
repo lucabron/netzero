@@ -1,6 +1,5 @@
 Get the right map and understand the country format [done]
 
-filter out countries. There is three sources for country: co2 data, pledge and geojson map.
 get net emissions. Should I find a new dataset? [done (emissions were already net)]
 get target goals (optional) 
 get reduction per year needed (optional) [done]
@@ -11,11 +10,10 @@ Create a new column that starts in 2015 and ends in 2050 to show the path. [done
 find difference between straight line and observed. [done]
 map how far the country is to the objective. use a regression. [done]
 Create regression from already existing empty cells from 2020 to 2050. [done]
-Add checbox for ghg. data up to 2016 are in the owid dataset. For more recent (up to 2018), search CAIT, PIK and maybe UNFCCC datasets
-Add checkbox menu for trade data. 
+Add checkbox for other ghg. As of 2020 data up to 2016 are in the owid dataset. For more recent (up to 2018), search CAIT, PIK and maybe UNFCCC datasets
+Add checkbox toggle for trade data. 
 
-Change github license.
-Learn about what license to use and how they protect me. Ask for help.
+Change github license. Learn about what license to use and how they protect me. Ask for help. [done]
 
 Create pledge map (what countries pledged to achieve). Already done by https://zerotracker.net/
 
@@ -27,12 +25,12 @@ Host on github (at least initially) [done]
 
 Explain methodology on about page [done]
 
-Google analytics
+Google analytics [opted for GoatCounter instead. done]
 
 Showcase on https://discourse.bokeh.org/
 
-Find sponsor and create sponsor space on about page.
+Find sponsor and create sponsor space on about page. (optional)
 
-Domain name.
+Domain name. (optional)
 
-Create Twitter and Linkedin account.
+Create BlueSky and Linkedin account. (optional)
