@@ -254,7 +254,7 @@ FONT = "Inter, system-ui, sans-serif"
 title = 'World'
 
 # create a new plot (with a title) using figure
-p = figure(title=title, sizing_mode="stretch_height", aspect_ratio=2,
+p = figure(title=title, sizing_mode="stretch_both",
            x_range=Range1d(1980, 2050, bounds=(1980,2050)),
            tools=[SaveTool()]) 
 
@@ -359,7 +359,7 @@ select.js_link('value', p.title, 'text')
 #    country_selected = select.value
 #    select.options = list(df[country_selected].values)
 
-layout = column(children = [select,p], aspect_ratio=2, sizing_mode="stretch_height") 
+layout = column(children = [select,p], sizing_mode="stretch_both") 
 # layout = column(children = [select,p], sizing_mode="scale_height") 
 
 output_file(join(dirname(__file__),'graph.html'), title='Bokeh plot: Objective net zero carbon emissions 2050')
